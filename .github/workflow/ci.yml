@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  push:
+    branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+
+  jobs:
+    build-test:
+      runs-on: ubuntu-latest
+
+      steps:      
+        - name: Checkout repository
+         uses: actions/checkout@v4
+
+         -name: show github context
+         run: |
+             echo "workflow: $Github_WORKFLOW"
+             echo "Event: $GITHUB_EVENT_NAME"
+             echo "Ref: $GITHUB_REF"
+             echo "Actor: $GITHUB_ACTOR"
+
+          -name: Basic Validation
+          run: |
+            test -f README.md || (echo "README missing" && exit1)
+
+          -name: create artifact
+            run: |
+              echo "hello world" > hello.txt
+
+
+            -name: Upload Artifact
+            users: actions/upload-artifact@v4
+            with:
+              name: hello-world
+              path: hello.txt
+              
+             
+
+      -
